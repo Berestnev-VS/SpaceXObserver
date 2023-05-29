@@ -15,6 +15,7 @@
 		E7AD8F502A24927A005BF00E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7AD8F4E2A24927A005BF00E /* LaunchScreen.storyboard */; };
 		E7AD8F582A2492A6005BF00E /* Rockets.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD8F572A2492A6005BF00E /* Rockets.swift */; };
 		E7AD8F5B2A249315005BF00E /* APICaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD8F5A2A249315005BF00E /* APICaller.swift */; };
+		E7AD8F5D2A24B437005BF00E /* Launches.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AD8F5C2A24B437005BF00E /* Launches.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		E7AD8F512A24927A005BF00E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7AD8F572A2492A6005BF00E /* Rockets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rockets.swift; sourceTree = "<group>"; };
 		E7AD8F5A2A249315005BF00E /* APICaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICaller.swift; sourceTree = "<group>"; };
+		E7AD8F5C2A24B437005BF00E /* Launches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Launches.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,11 +62,12 @@
 		E7AD8F422A249278005BF00E /* SpaceXObserver */ = {
 			isa = PBXGroup;
 			children = (
-				E7AD8F572A2492A6005BF00E /* Rockets.swift */,
 				E7AD8F5A2A249315005BF00E /* APICaller.swift */,
+				E7AD8F572A2492A6005BF00E /* Rockets.swift */,
+				E7AD8F5C2A24B437005BF00E /* Launches.swift */,
+				E7AD8F472A249278005BF00E /* ViewController.swift */,
 				E7AD8F432A249278005BF00E /* AppDelegate.swift */,
 				E7AD8F452A249278005BF00E /* SceneDelegate.swift */,
-				E7AD8F472A249278005BF00E /* ViewController.swift */,
 				E7AD8F492A249278005BF00E /* Main.storyboard */,
 				E7AD8F4C2A24927A005BF00E /* Assets.xcassets */,
 				E7AD8F4E2A24927A005BF00E /* LaunchScreen.storyboard */,
@@ -148,6 +151,7 @@
 				E7AD8F582A2492A6005BF00E /* Rockets.swift in Sources */,
 				E7AD8F442A249278005BF00E /* AppDelegate.swift in Sources */,
 				E7AD8F5B2A249315005BF00E /* APICaller.swift in Sources */,
+				E7AD8F5D2A24B437005BF00E /* Launches.swift in Sources */,
 				E7AD8F462A249278005BF00E /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
