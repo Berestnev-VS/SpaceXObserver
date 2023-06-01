@@ -62,10 +62,11 @@
 		E7AD8F422A249278005BF00E /* SpaceXObserver */ = {
 			isa = PBXGroup;
 			children = (
-				E7AD8F5A2A249315005BF00E /* APICaller.swift */,
-				E7AD8F572A2492A6005BF00E /* Rockets.swift */,
-				E7AD8F5C2A24B437005BF00E /* Launches.swift */,
-				E7AD8F472A249278005BF00E /* ViewController.swift */,
+				E7B813CC2A274021004C9920 /* Managers */,
+				E7B813C82A27400E004C9920 /* Models */,
+				E7B813C92A274014004C9920 /* Views */,
+				E7B813CA2A274017004C9920 /* Controllers */,
+				E7B813CB2A27401C004C9920 /* Resources */,
 				E7AD8F432A249278005BF00E /* AppDelegate.swift */,
 				E7AD8F452A249278005BF00E /* SceneDelegate.swift */,
 				E7AD8F492A249278005BF00E /* Main.storyboard */,
@@ -74,6 +75,45 @@
 				E7AD8F512A24927A005BF00E /* Info.plist */,
 			);
 			path = SpaceXObserver;
+			sourceTree = "<group>";
+		};
+		E7B813C82A27400E004C9920 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E7AD8F572A2492A6005BF00E /* Rockets.swift */,
+				E7AD8F5C2A24B437005BF00E /* Launches.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E7B813C92A274014004C9920 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E7B813CA2A274017004C9920 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E7AD8F472A249278005BF00E /* ViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		E7B813CB2A27401C004C9920 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		E7B813CC2A274021004C9920 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				E7AD8F5A2A249315005BF00E /* APICaller.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -86,6 +126,8 @@
 				E7AD8F3C2A249278005BF00E /* Sources */,
 				E7AD8F3D2A249278005BF00E /* Frameworks */,
 				E7AD8F3E2A249278005BF00E /* Resources */,
+				E7187CC12A27291100F333AD /* ShellScript */,
+				E7B813C72A273B55004C9920 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -141,6 +183,43 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		E7187CC12A27291100F333AD /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "SWIFT_LINT=/usr/local/bin/swiftlint\n\nif [[ -e \"${SWIFT_LINT}\" ]]; then\n    echo \"[I] Found SwiftLint at ${SWIFT_LINT}\"\nelse\n    echo \"[!] Local SwiftLint not found at ${SWIFT_LINT}\"\n    export SWIFT_LINT=${PWD}/Pods/SwiftLint/swiftlint\n    echo \"[I] Try to using SwiftLint from cocoapods at ${SWIFT_LINT}\"\nfi\n\nif [[ ! -e \"${SWIFT_LINT}\" ]]; then\n    echo \"[!] SwifLint is not installed.\"\n    echo \"[!] Expected location is '${SWIFT_LINT}'\"\n    echo \"[!] Please install it. eg. 'brew install swiftlint'\"\n    exit 1\nfi\n\necho \"[I] SwiftLint version: $(${SWIFT_LINT} version)\"\n\ngit ls-files --other --modified --exclude-standard -- \"*.swift\" | while read filename; do\n    $SWIFT_LINT lint --path \"$filename\";\n    $SWIFT_LINT autocorrect --path \"$filename\";\ndone\n";
+		};
+		E7B813C72A273B55004C9920 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint --config \"/Users/vladimir/Documents/Projects/SpaceXObserver/.swiftlint.yml\"\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E7AD8F3C2A249278005BF00E /* Sources */ = {

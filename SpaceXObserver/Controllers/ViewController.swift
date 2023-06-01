@@ -7,24 +7,31 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-    
-    let rocketsTextView: UITextView = {
+final class ViewController: UIViewController {
+
+    // MARK: Properties -
+    private let apiCaller: APICaller = APICaller()
+    private let idRocketArray = ["5e9d0d95eda69973a809d1ec",
+                                 "5e9d0d95eda69974db09d1ed"]
+
+    private let rocketsTextView: UITextView = {
         let textView = UITextView()
         textView.font = .boldSystemFont(ofSize: 12)
         textView.textColor = .black
         return textView
     }()
-    
+
+    // MARK: Lifecycle -
     override func viewDidLoad() {
         rocketsTextView.frame = view.bounds
         view.addSubview(rocketsTextView)
         getRockets()
         getLaunches()
     }
-    
-    func getRockets(){
-        APICaller.shared.getRockets() { [weak self] result in
+
+    // MARK: Methods -
+    private func getRockets() {
+        apiCaller.getRockets { [weak self] result in
             switch result {
             case .success(let rockets):
                 DispatchQueue.main.async {
@@ -35,9 +42,9 @@ class ViewController: UIViewController {
             }
         }
     }
-    
-    func getLaunches(){
-        APICaller.shared.getLaunches() { result in
+
+    private func getLaunches() {
+        apiCaller.getLaunches(forRocketID: "5e9d0d95eda69974db09d1ed") { result in
             switch result {
             case .success(let launches):
                 print(launches)
@@ -46,5 +53,5 @@ class ViewController: UIViewController {
             }
         }
     }
-    
+
 }
