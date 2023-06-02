@@ -21,6 +21,7 @@ final class APICaller {
     private let jsonDecoder: JSONDecoder
     private let session: URLSession
     private let baseURL = URL(string: "https://api.spacexdata.com/v4")!
+    private var formatters = [String: DateFormatter]()
 
     init(jsonEncoder: JSONEncoder = JSONEncoder(),
          jsonDecoder: JSONDecoder = JSONDecoder(),
@@ -35,8 +36,14 @@ final class APICaller {
         jsonDecoder.dateDecodingStrategy = .custom({ decoder in
             let container = try decoder.singleValueContainer()
             let dateString = try container.decode(String.self)
-            let formatter = DateFormatter()
-            formatter.dateFormat = dateFormat
+            let formatter: DateFormatter
+            if let existingFormatter = self.formatters[dateFormat] {
+                formatter = existingFormatter
+            } else {
+                formatter = DateFormatter()
+                formatter.dateFormat = dateFormat
+                self.formatters[dateFormat] = formatter
+            }
             if let date = formatter.date(from: dateString) {
                 return date
             }
