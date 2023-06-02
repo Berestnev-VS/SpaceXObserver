@@ -10,15 +10,16 @@ import Foundation
 struct Rocket: Decodable {
     let id: String
     let name: String
-    let height, diameter: Diameter
+    let height, diameter: LengthUnit
     let mass: Mass
     let firstStage: Stage
     let secondStage: Stage
     let firstFlight: String
     let country: String
-    let payloadWeights: [PayloadWeight]
+    let payloadWeights: [Mass]
     let active: Bool
     let costPerLaunch: Int
+    let flickrImages: [URL]
 }
 
 extension Rocket {
@@ -32,11 +33,7 @@ extension Rocket {
         let kg, lb: Int
     }
 
-    struct Diameter: Decodable {
+    struct LengthUnit: Decodable {
         let meters, feet: Double?
-    }
-
-    struct PayloadWeight: Decodable {
-        let kg, lb: Int
     }
 }

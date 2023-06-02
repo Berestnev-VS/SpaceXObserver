@@ -9,8 +9,8 @@ import UIKit
 
 final class ViewController: UIViewController {
 
-    // MARK: Properties -
-    private let apiCaller: APICaller = APICaller()
+    // MARK: - Properties
+    private let apiCaller = APICaller()
     private let idRocketArray = ["5e9d0d95eda69973a809d1ec",
                                  "5e9d0d95eda69974db09d1ed"]
 
@@ -21,15 +21,16 @@ final class ViewController: UIViewController {
         return textView
     }()
 
-    // MARK: Lifecycle -
+    // MARK: - Lifecycle
     override func viewDidLoad() {
+        super.viewDidLoad()
         rocketsTextView.frame = view.bounds
         view.addSubview(rocketsTextView)
         getRockets()
         getLaunches()
     }
 
-    // MARK: Methods -
+    // MARK: - Methods
     private func getRockets() {
         apiCaller.getRockets { [weak self] result in
             switch result {
@@ -53,5 +54,4 @@ final class ViewController: UIViewController {
             }
         }
     }
-
 }

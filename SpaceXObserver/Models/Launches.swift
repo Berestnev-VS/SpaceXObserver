@@ -7,16 +7,20 @@
 
 import Foundation
 
+struct LaunchQuery: Encodable {
+    let query: RocketId
+}
+extension LaunchQuery  {
+    struct RocketId: Encodable {
+        let rocket: String
+    }
+}
 struct LaunchResponse: Decodable {
     let docs: [Launch]
 }
 
 struct Launch: Decodable {
-    let staticFireDateUtc: String?
-    let dateUtc: String?
-    let staticFireDateUnix: Int?
-    let success: Bool?
-    let id: String
     let name: String
-    let flightNumber: Int
+    let dateLocal: String?
+    let success: Bool?
 }

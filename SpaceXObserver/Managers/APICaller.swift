@@ -7,27 +7,31 @@
 
 import Foundation
 
-// MARK: - Errors
 enum APIError: Error {
     case failedToGetData
     case invalidURL
     case failedToSerializeJson
+    case encodingFailed
 }
 
-// MARK: - Manager
 final class APICaller {
+
     // MARK: - Properties
+    private let jsonEncoder: JSONEncoder
     private let jsonDecoder: JSONDecoder
     private let session: URLSession
-    private let baseURL = URL(string: "https://api.spacexdata.com/v4")!
+    private let baseURL: URL? = URL(string: "https://api.spacexdata.com/v4")
 
-    init(session: URLSession = URLSession.shared, jsonDecoder: JSONDecoder = JSONDecoder()) {
+    init(session: URLSession = URLSession.shared,
+         jsonEncoder: JSONEncoder = JSONEncoder(),
+         jsonDecoder: JSONDecoder = JSONDecoder()) {
         self.session = session
+        self.jsonEncoder = jsonEncoder
         self.jsonDecoder = jsonDecoder
         self.jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
     }
 
-    // MARK: - Methods
+    // MARK: - Request Methods
     func performRequest<T: Decodable>(with request: URLRequest, completion: @escaping (Result<T, APIError>) -> Void) {
         let task = session.dataTask(with: request) { data, _, error in
             guard let data = data, error == nil else {
@@ -46,22 +50,26 @@ final class APICaller {
     }
 
     func getRockets(completion: @escaping (Result<[Rocket], APIError>) -> Void) {
-        let rocketsURL = baseURL.appendingPathComponent("rockets")
+        guard let rocketsURL = baseURL?.appendingPathComponent("rockets") else { return }
         performRequest(with: URLRequest(url: rocketsURL), completion: completion)
     }
 
     func getLaunches(forRocketID rocketID: String, completion: @escaping (Result<LaunchResponse, APIError>) -> Void) {
-        let launchesURL = baseURL.appendingPathComponent("launches/query")
+        guard let launchesURL = baseURL?.appendingPathComponent("launches/query") else {
+            print(APIError.invalidURL)
+            return
+        }
         var request = URLRequest(url: launchesURL)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        let body = ["query": ["rocket": rocketID]]
-        guard let jsonData = try? JSONEncoder().encode(body) else {
-            completion(.failure(.failedToSerializeJson))
-            return
+        let body = LaunchQuery(query: .init(rocket: rocketID))
+        do {
+            let jsonData = try jsonEncoder.encode(body)
+            request.httpBody = jsonData
+            performRequest(with: request, completion: completion)
+        } catch {
+            completion(.failure(.encodingFailed))
         }
-        request.httpBody = jsonData
-        performRequest(with: request, completion: completion)
     }
 }
