@@ -14,7 +14,7 @@ struct Rocket: Decodable {
     let mass: Mass
     let firstStage: Stage
     let secondStage: Stage
-    let firstFlight: String
+    let firstFlight: Date
     let country: String
     let payloadWeights: [Mass]
     let active: Bool

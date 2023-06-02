@@ -17,18 +17,16 @@ enum APIError: Error {
 final class APICaller {
 
     // MARK: - Properties
-    private let jsonEncoder: JSONEncoder
-    private let jsonDecoder: JSONDecoder
-    private let session: URLSession
+    private let jsonEncoder = JSONEncoder()
+    private let jsonDecoder = JSONDecoder()
+    private let dateFormatter = DateFormatter()
+    private let session = URLSession.shared
     private let baseURL: URL? = URL(string: "https://api.spacexdata.com/v4")
 
-    init(session: URLSession = URLSession.shared,
-         jsonEncoder: JSONEncoder = JSONEncoder(),
-         jsonDecoder: JSONDecoder = JSONDecoder()) {
-        self.session = session
-        self.jsonEncoder = jsonEncoder
-        self.jsonDecoder = jsonDecoder
+    init() {
+        self.dateFormatter.dateFormat = "yyyy-MM-dd"
         self.jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        self.jsonDecoder.dateDecodingStrategy = .formatted(dateFormatter)
     }
 
     // MARK: - Request Methods
