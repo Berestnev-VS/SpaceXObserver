@@ -23,6 +23,6 @@ struct LaunchResponse: Decodable {
 
 struct Launch: Decodable {
     let name: String
-    let dateLocal: String?
+    let dateLocal: Date?
     let success: Bool?
 }
