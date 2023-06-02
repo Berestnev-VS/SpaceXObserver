@@ -11,8 +11,7 @@ final class ViewController: UIViewController {
 
     // MARK: - Properties
     private let apiCaller = APICaller()
-    private let idRocketArray = ["5e9d0d95eda69973a809d1ec",
-                                 "5e9d0d95eda69974db09d1ed"]
+    private let rocketId = "5e9d0d95eda69974db09d1ed"
 
     private let rocketsTextView: UITextView = {
         let textView = UITextView()
@@ -45,7 +44,7 @@ final class ViewController: UIViewController {
     }
 
     private func getLaunches() {
-        apiCaller.getLaunches(forRocketID: "5e9d0d95eda69974db09d1ed") { result in
+        apiCaller.getLaunches(with: rocketId) { result in
             switch result {
             case .success(let launches):
                 print(launches)

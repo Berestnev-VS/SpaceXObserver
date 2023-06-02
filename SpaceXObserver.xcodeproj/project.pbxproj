@@ -59,6 +59,13 @@
 			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
+		E74566ED2A2A56520048B9D3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		E7AD8F372A249278005BF00E = {
 			isa = PBXGroup;
 			children = (
@@ -81,7 +88,7 @@
 				E74566EB2A29EAAB0048B9D3 /* Application */,
 				E7B813CC2A274021004C9920 /* Managers */,
 				E7B813C82A27400E004C9920 /* Models */,
-				E7B813C92A274014004C9920 /* Views */,
+				E74566ED2A2A56520048B9D3 /* Views */,
 				E7B813CA2A274017004C9920 /* Controllers */,
 				E7B813CB2A27401C004C9920 /* Resources */,
 				E74566EC2A29EB0D0048B9D3 /* SupportingFiles */,
@@ -96,13 +103,6 @@
 				E7AD8F5C2A24B437005BF00E /* Launches.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		E7B813C92A274014004C9920 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		E7B813CA2A274017004C9920 /* Controllers */ = {

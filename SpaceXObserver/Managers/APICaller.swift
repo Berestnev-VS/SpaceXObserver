@@ -18,49 +18,39 @@ final class APICaller {
 
     // MARK: - Properties
     private let jsonEncoder: JSONEncoder
-    private let jsonDecoder: JSONDecoder
+    private let rocketJsonDecoder: JSONDecoder
+    private let launchJsonDecoder: JSONDecoder
     private let session: URLSession
     private let baseURL = URL(string: "https://api.spacexdata.com/v4")!
-    private var formatters = [String: DateFormatter]()
 
     init(jsonEncoder: JSONEncoder = JSONEncoder(),
-         jsonDecoder: JSONDecoder = JSONDecoder(),
+         rocketJsonDecoder: JSONDecoder = JSONDecoder(),
+         launchJsonDecoder: JSONDecoder = JSONDecoder(),
          session: URLSession = URLSession.shared) {
-        self.jsonDecoder = jsonDecoder
+
+        self.rocketJsonDecoder = rocketJsonDecoder
+        self.launchJsonDecoder = launchJsonDecoder
         self.jsonEncoder = jsonEncoder
         self.session = session
-        self.jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-    }
 
-    private func setupDecodingStrategy(for jsonDecoder: JSONDecoder, with dateFormat: String) {
-        jsonDecoder.dateDecodingStrategy = .custom({ decoder in
-            let container = try decoder.singleValueContainer()
-            let dateString = try container.decode(String.self)
-            let formatter: DateFormatter
-            if let existingFormatter = self.formatters[dateFormat] {
-                formatter = existingFormatter
-            } else {
-                formatter = DateFormatter()
-                formatter.dateFormat = dateFormat
-                self.formatters[dateFormat] = formatter
-            }
-            if let date = formatter.date(from: dateString) {
-                return date
-            }
-            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid date: " + dateString)
-        })
+        let rocketDateFormatter = DateFormatter()
+        rocketDateFormatter.dateFormat = "yyyy-MM-dd"
+        rocketJsonDecoder.dateDecodingStrategy = .formatted(rocketDateFormatter)
+        rocketJsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        launchJsonDecoder.dateDecodingStrategy = .iso8601
+        launchJsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
     }
 
     // MARK: - Request Methods
-    private func performRequest<T: Decodable>(with request: URLRequest, dateFormat: String, completion: @escaping (Result<T, APIError>) -> Void) {
-        setupDecodingStrategy(for: jsonDecoder, with: dateFormat)
+    private func performRequest<T: Decodable>(with request: URLRequest, _ jsonDecoder: JSONDecoder, completion: @escaping (Result<T, APIError>) -> Void) {
         let task = session.dataTask(with: request) { data, _, error in
             guard let data = data, error == nil else {
                 completion(.failure(.failedToGetData))
                 return
             }
             do {
-                let result = try self.jsonDecoder.decode(T.self, from: data)
+                let result = try jsonDecoder.decode(T.self, from: data)
                 completion(.success(result))
             } catch {
                 completion(.failure(.failedToSerializeJson))
@@ -71,10 +61,10 @@ final class APICaller {
 
     func getRockets(completion: @escaping (Result<[Rocket], APIError>) -> Void) {
         let rocketsURL = baseURL.appendingPathComponent("rockets")
-        performRequest(with: URLRequest(url: rocketsURL), dateFormat: "yyyy-MM-dd", completion: completion)
+        performRequest(with: URLRequest(url: rocketsURL), rocketJsonDecoder, completion: completion)
     }
 
-    func getLaunches(forRocketID rocketID: String, completion: @escaping (Result<LaunchResponse, APIError>) -> Void) {
+    func getLaunches(with rocketID: String, completion: @escaping (Result<LaunchResponse, APIError>) -> Void) {
         let launchesURL = baseURL.appendingPathComponent("launches/query")
         var request = URLRequest(url: launchesURL)
         request.httpMethod = "POST"
@@ -84,7 +74,7 @@ final class APICaller {
         do {
             let jsonData = try jsonEncoder.encode(body)
             request.httpBody = jsonData
-            performRequest(with: request, dateFormat: "yyyy-MM-dd'T'HH:mm:ssZZZZZ", completion: completion)
+            performRequest(with: request, launchJsonDecoder, completion: completion)
         } catch {
             completion(.failure(.encodingFailed))
         }
