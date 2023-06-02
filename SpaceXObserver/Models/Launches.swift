@@ -10,11 +10,13 @@ import Foundation
 struct LaunchQuery: Encodable {
     let query: RocketId
 }
+
 extension LaunchQuery  {
     struct RocketId: Encodable {
         let rocket: String
     }
 }
+
 struct LaunchResponse: Decodable {
     let docs: [Launch]
 }

@@ -21,7 +21,7 @@ final class APICaller {
     private let jsonDecoder = JSONDecoder()
     private let dateFormatter = DateFormatter()
     private let session = URLSession.shared
-    private let baseURL: URL? = URL(string: "https://api.spacexdata.com/v4")
+    private let baseURL = URL(string: "https://api.spacexdata.com/v4")!
 
     init() {
         self.dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -30,7 +30,7 @@ final class APICaller {
     }
 
     // MARK: - Request Methods
-    func performRequest<T: Decodable>(with request: URLRequest, completion: @escaping (Result<T, APIError>) -> Void) {
+    private func performRequest<T: Decodable>(with request: URLRequest, completion: @escaping (Result<T, APIError>) -> Void) {
         let task = session.dataTask(with: request) { data, _, error in
             guard let data = data, error == nil else {
                 completion(.failure(.failedToGetData))
@@ -48,15 +48,12 @@ final class APICaller {
     }
 
     func getRockets(completion: @escaping (Result<[Rocket], APIError>) -> Void) {
-        guard let rocketsURL = baseURL?.appendingPathComponent("rockets") else { return }
+        let rocketsURL = baseURL.appendingPathComponent("rockets")
         performRequest(with: URLRequest(url: rocketsURL), completion: completion)
     }
 
     func getLaunches(forRocketID rocketID: String, completion: @escaping (Result<LaunchResponse, APIError>) -> Void) {
-        guard let launchesURL = baseURL?.appendingPathComponent("launches/query") else {
-            print(APIError.invalidURL)
-            return
-        }
+        let launchesURL = baseURL.appendingPathComponent("launches/query")
         var request = URLRequest(url: launchesURL)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
