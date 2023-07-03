@@ -37,14 +37,6 @@ final class MainPageViewController: UIPageViewController {
         return [vc1, vc2, vc3, vc4]
     }()
 
-    init() {
-        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,11 +48,10 @@ final class MainPageViewController: UIPageViewController {
 
     // MARK: - Methods
     private func setupRocketTextView() {
-        if let firstViewController = viewControllersArray.first {
-            self.setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
-            rocketsTextView.frame = firstViewController.view.bounds
-            firstViewController.view.addSubview(rocketsTextView)
-        }
+        guard let firstViewController = viewControllersArray.first else { return }
+        self.setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
+        rocketsTextView.frame = firstViewController.view.bounds
+        firstViewController.view.addSubview(rocketsTextView)
     }
 
     private func getRockets() {
@@ -92,15 +83,15 @@ final class MainPageViewController: UIPageViewController {
 extension MainPageViewController: UIPageViewControllerDataSource {
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let index = viewControllersArray.firstIndex(of: viewController), index > 0
-        else { return nil }
+        guard let index = viewControllersArray.firstIndex(of: viewController),
+                index > 0 else { return nil }
         let previousIndex = index - 1
         return viewControllersArray[previousIndex]
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let index = viewControllersArray.firstIndex(of: viewController), index < (viewControllersArray.count - 1)
-        else { return nil }
+        guard let index = viewControllersArray.firstIndex(of: viewController),
+                index < (viewControllersArray.count - 1) else { return nil }
         let nextIndex = index + 1
         return viewControllersArray[nextIndex]
     }
