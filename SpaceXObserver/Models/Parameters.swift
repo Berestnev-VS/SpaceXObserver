@@ -8,7 +8,7 @@
 import Foundation
 
 enum Parameter: Int, CaseIterable {
-    case height = 0
+    case height
     case diameter
     case mass
     case payload
