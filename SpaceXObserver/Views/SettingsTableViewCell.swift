@@ -32,8 +32,7 @@ final class SettingsTableViewCell: UITableViewCell {
         UserDefaults.standard.set(unitSegmentedControl.selectedSegmentIndex, forKey: parameter.title)
     }
 
-    public func configure(with parameter: Parameter?, database: UserDefaults) {
-        guard let parameter = parameter else { return }
+    public func configure(with parameter: Parameter, database: UserDefaults) {
         self.parameter = parameter
         textLabel?.text = parameter.title
         for (index, unit) in parameter.units.enumerated() {
