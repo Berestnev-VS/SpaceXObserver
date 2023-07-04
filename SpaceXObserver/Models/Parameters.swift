@@ -7,7 +7,11 @@
 
 import Foundation
 
+<<<<<<< refs/remotes/origin/settingsVC
 enum Parameter: Int, CaseIterable {
+=======
+enum Parameter: CaseIterable {
+>>>>>>> fix issues
     case height
     case diameter
     case mass
@@ -15,17 +19,23 @@ enum Parameter: Int, CaseIterable {
 
     var title: String {
         switch self {
-        case .height: return "Высота"
-        case .diameter: return "Диаметр"
-        case .mass: return "Масса"
-        case .payload: return "Полезная нагрузка"
+        case .height:
+            return "Высота"
+        case .diameter:
+            return "Диаметр"
+        case .mass:
+            return "Масса"
+        case .payload:
+            return "Полезная нагрузка"
         }
     }
 
     var units: [String] {
         switch self {
-        case .height, .diameter: return ["m", "ft"]
-        case .mass, .payload: return ["kg", "lb"]
+        case .height, .diameter:
+            return ["m", "ft"]
+        case .mass, .payload:
+            return ["kg", "lb"]
         }
     }
 }

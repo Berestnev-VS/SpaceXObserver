@@ -7,27 +7,14 @@
 
 import UIKit
 
-class SettingsTableViewCell: UITableViewCell {
+final class SettingsTableViewCell: UITableViewCell {
 
-    static let identifier = "SettingsTableViewCell"
+    // MARK: - Properties
+    static let identifier = String(describing: SettingsTableViewCell.self)
+    private var parameter: Parameter?
+    private let unitSegmentedControl = UISegmentedControl()
 
-    var parameter: Parameter? {
-        didSet {
-            guard let parameter = parameter else { return }
-            textLabel?.text = parameter.title
-            unitSegmentedControl.removeAllSegments()
-            for (index, unit) in parameter.units.enumerated() {
-                unitSegmentedControl.insertSegment(withTitle: unit, at: index, animated: false)
-            }
-            unitSegmentedControl.selectedSegmentIndex = UserDefaults.standard.integer(forKey: parameter.title)
-        }
-    }
-
-    let unitSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl()
-        return segmentedControl
-    }()
-
+    // MARK: - init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         unitSegmentedControl.addTarget(self, action: #selector(unitChanged), for: .valueChanged)
@@ -39,8 +26,24 @@ class SettingsTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc func unitChanged() {
+    // MARK: - Methods
+    @objc private func unitChanged() {
         guard let parameter = parameter else { return }
         UserDefaults.standard.set(unitSegmentedControl.selectedSegmentIndex, forKey: parameter.title)
+    }
+
+    public func configure(with parameter: Parameter?, database: UserDefaults) {
+        guard let parameter = parameter else { return }
+        self.parameter = parameter
+        textLabel?.text = parameter.title
+        for (index, unit) in parameter.units.enumerated() {
+            unitSegmentedControl.insertSegment(withTitle: unit, at: index, animated: false)
+        }
+        unitSegmentedControl.selectedSegmentIndex = database.integer(forKey: parameter.title)
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        unitSegmentedControl.removeAllSegments()
     }
 }
