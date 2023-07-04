@@ -85,7 +85,7 @@ extension MainPageViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let index = viewControllersArray.firstIndex(of: viewController),
                 index > 0 else { return nil }
-        let previousIndex = indxex - 1
+        let previousIndex = index - 1
         return viewControllersArray[previousIndex]
     }
 
