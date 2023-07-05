@@ -8,7 +8,6 @@
 import UIKit
 
 final class MainPageViewController: UIPageViewController {
-
     // MARK: - Properties
     private let apiCaller = APICaller()
     private let rocketId = "5e9d0d95eda69974db09d1ed"

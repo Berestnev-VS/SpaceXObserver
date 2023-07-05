@@ -8,22 +8,11 @@
 import UIKit
 
 final class SettingsTableViewCell: UITableViewCell {
-
     // MARK: - Properties
-    static let identifier = String(describing: SettingsTableViewCell.self)
     private let unitSegmentedControl = UISegmentedControl()
-
-    var parameter: Parameter? {
-        didSet {
-            guard let parameter = parameter else { return }
-            textLabel?.text = parameter.title
-            unitSegmentedControl.removeAllSegments()
-            for (index, unit) in parameter.units.enumerated() {
-                unitSegmentedControl.insertSegment(withTitle: unit, at: index, animated: false)
-            }
-            unitSegmentedControl.selectedSegmentIndex = UserDefaults.standard.integer(forKey: parameter.title)
-        }
-    }
+    private var parameter: Parameter?
+    static let identifier = String(describing: SettingsTableViewCell.self)
+    weak var delegate: SettingsTableViewCellDelegate?
 
     // MARK: - init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -38,13 +27,27 @@ final class SettingsTableViewCell: UITableViewCell {
     }
 
     // MARK: - Methods
+    public func configure(with parameter: Parameter, selectedUnitIndex: Int) {
+        self.parameter = parameter
+        textLabel?.text = parameter.title
+        for (index, unit) in parameter.units.enumerated() {
+            unitSegmentedControl.insertSegment(withTitle: unit, at: index, animated: false)
+        }
+        unitSegmentedControl.selectedSegmentIndex = selectedUnitIndex
+    }
+
     @objc private func unitChanged() {
         guard let parameter = parameter else { return }
-        UserDefaults.standard.set(unitSegmentedControl.selectedSegmentIndex, forKey: parameter.title)
+        delegate?.unitSelectionDidChange(parameter: parameter, selectedIndex: unitSegmentedControl.selectedSegmentIndex)
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
         unitSegmentedControl.removeAllSegments()
     }
+}
+
+// MARK: - SettingsTableViewCellDelegate
+protocol SettingsTableViewCellDelegate: AnyObject {
+    func unitSelectionDidChange(parameter: Parameter, selectedIndex: Int)
 }
