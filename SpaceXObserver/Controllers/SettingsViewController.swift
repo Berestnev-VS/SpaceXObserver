@@ -7,10 +7,13 @@
 
 import UIKit
 
-final class SettingsViewController: UIViewController {
+import UIKit
 
+final class SettingsViewController: UIViewController {
     // MARK: - Properties
     private let tableView = UITableView()
+    private let userDefaultsManager = UserDefaultsManager()
+    private var selectedUnitIndices: [Int] = []
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -43,25 +46,33 @@ final class SettingsViewController: UIViewController {
     }
 }
 
-// MARK: - UISettingsViewControllerDataSource
+// MARK: - UITableViewDataSource
 extension SettingsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         Parameter.allCases.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.identifier,
                                                        for: indexPath) as? SettingsTableViewCell else { return UITableViewCell() }
         let parameter = Parameter.allCases[indexPath.row]
-        cell.configure(with: parameter, database: UserDefaults.standard)
-
+        let selectedUnitIndex = userDefaultsManager.getSelectedUnitIndex(for: parameter)
+        cell.configure(with: parameter, selectedUnitIndex: selectedUnitIndex)
+        cell.delegate = self
         return cell
     }
 }
 
-// MARK: - UISettingsViewControllerDelegate
+// MARK: - UITableViewDelegate
 extension SettingsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         60
+    }
+}
+
+// MARK: - SettingsTableViewCellDelegate
+extension SettingsViewController: SettingsTableViewCellDelegate {
+    func unitSelectionDidChange(parameter: Parameter, selectedIndex: Int) {
+        userDefaultsManager.saveSelectedUnitIndex(for: parameter, index: selectedIndex)
     }
 }
