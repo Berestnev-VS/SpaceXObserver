@@ -7,11 +7,7 @@
 
 import Foundation
 
-<<<<<<< refs/remotes/origin/settingsVC
-enum Parameter: Int, CaseIterable {
-=======
 enum Parameter: CaseIterable {
->>>>>>> fix issues
     case height
     case diameter
     case mass
