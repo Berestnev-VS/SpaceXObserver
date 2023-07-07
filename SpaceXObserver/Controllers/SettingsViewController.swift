@@ -28,13 +28,14 @@ final class SettingsViewController: UIViewController {
 
     // MARK: - Methods
     private func setupTableView() {
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.rowHeight = 60
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.identifier)
     }
 
     private func setupConstraints() {
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -56,17 +57,14 @@ extension SettingsViewController: UITableViewDataSource {
         let parameter = Parameter.allCases[indexPath.row]
         let selectedUnitIndex = userDefaultsManager.getSelectedUnitIndex(for: parameter)
         cell.configure(with: parameter, selectedUnitIndex: selectedUnitIndex)
+        print(selectedUnitIndex)
         cell.delegate = self
         return cell
     }
 }
 
 // MARK: - UITableViewDelegate
-extension SettingsViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        60
-    }
-}
+extension SettingsViewController: UITableViewDelegate { }
 
 // MARK: - SettingsTableViewCellDelegate
 extension SettingsViewController: SettingsTableViewCellDelegate {

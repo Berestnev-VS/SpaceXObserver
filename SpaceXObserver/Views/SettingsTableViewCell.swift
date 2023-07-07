@@ -26,6 +26,12 @@ final class SettingsTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        unitSegmentedControl.removeAllSegments()
+    }
+
     // MARK: - Methods
     public func configure(with parameter: Parameter, selectedUnitIndex: Int) {
         self.parameter = parameter
@@ -39,11 +45,6 @@ final class SettingsTableViewCell: UITableViewCell {
     @objc private func unitChanged() {
         guard let parameter = parameter else { return }
         delegate?.unitSelectionDidChange(parameter: parameter, selectedIndex: unitSegmentedControl.selectedSegmentIndex)
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        unitSegmentedControl.removeAllSegments()
     }
 }
 
