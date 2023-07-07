@@ -11,7 +11,6 @@ final class SettingsTableViewCell: UITableViewCell {
     // MARK: - Properties
     private let unitSegmentedControl = UISegmentedControl()
     private var parameter: Parameter?
-    static let identifier = String(describing: SettingsTableViewCell.self)
     weak var delegate: SettingsTableViewCellDelegate?
 
     // MARK: - init

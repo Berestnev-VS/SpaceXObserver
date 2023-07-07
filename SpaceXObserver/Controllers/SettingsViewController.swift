@@ -57,7 +57,6 @@ extension SettingsViewController: UITableViewDataSource {
         let parameter = Parameter.allCases[indexPath.row]
         let selectedUnitIndex = userDefaultsManager.getSelectedUnitIndex(for: parameter)
         cell.configure(with: parameter, selectedUnitIndex: selectedUnitIndex)
-        print(selectedUnitIndex)
         cell.delegate = self
         return cell
     }
