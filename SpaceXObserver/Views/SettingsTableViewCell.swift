@@ -11,7 +11,7 @@ final class SettingsTableViewCell: UITableViewCell {
     // MARK: - Properties
     private let unitSegmentedControl = UISegmentedControl()
     private var parameter: Parameter?
-    weak var delegate: SettingsTableViewCellDelegate?
+    private var selectionHandler: ((Int) -> Void)?
 
     // MARK: - init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -32,22 +32,18 @@ final class SettingsTableViewCell: UITableViewCell {
     }
 
     // MARK: - Methods
-    public func configure(with parameter: Parameter, selectedUnitIndex: Int) {
+    public func configure(with parameter: Parameter, selectedUnitIndex: Int, selectionHandler: @escaping (Int) -> Void) {
         self.parameter = parameter
+        self.selectionHandler = selectionHandler
         textLabel?.text = parameter.title
-        for (index, unit) in parameter.units.enumerated() {
-            unitSegmentedControl.insertSegment(withTitle: unit, at: index, animated: false)
+        for unit in parameter.units {
+            unitSegmentedControl.insertSegment(withTitle: unit, at: 0, animated: false)
         }
         unitSegmentedControl.selectedSegmentIndex = selectedUnitIndex
     }
 
     @objc private func unitChanged() {
         guard let parameter = parameter else { return }
-        delegate?.unitSelectionDidChange(parameter: parameter, selectedIndex: unitSegmentedControl.selectedSegmentIndex)
+        selectionHandler?(unitSegmentedControl.selectedSegmentIndex)
     }
-}
-
-// MARK: - SettingsTableViewCellDelegate
-protocol SettingsTableViewCellDelegate: AnyObject {
-    func unitSelectionDidChange(parameter: Parameter, selectedIndex: Int)
 }

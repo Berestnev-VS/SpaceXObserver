@@ -29,9 +29,9 @@ enum Parameter: CaseIterable {
     var units: [String] {
         switch self {
         case .height, .diameter:
-            return ["m", "ft"]
+            return ["ft", "m"]
         case .mass, .payload:
-            return ["kg", "lb"]
+            return ["lb", "kg"]
         }
     }
 }

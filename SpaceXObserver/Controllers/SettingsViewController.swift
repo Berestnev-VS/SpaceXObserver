@@ -19,10 +19,6 @@ final class SettingsViewController: UIViewController {
         view.backgroundColor = .white
         setupTableView()
         view.addSubview(tableView)
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
         setupConstraints()
     }
 
@@ -56,18 +52,13 @@ extension SettingsViewController: UITableViewDataSource {
                                                        for: indexPath) as? SettingsTableViewCell else { return UITableViewCell() }
         let parameter = Parameter.allCases[indexPath.row]
         let selectedUnitIndex = userDefaultsManager.getSelectedUnitIndex(for: parameter)
-        cell.configure(with: parameter, selectedUnitIndex: selectedUnitIndex)
-        cell.delegate = self
+        cell.configure(with: parameter, selectedUnitIndex: selectedUnitIndex) { selectedIndex in
+            self.userDefaultsManager.saveSelectedUnitIndex(for: parameter, index: selectedIndex)
+        }
         return cell
     }
+
 }
 
 // MARK: - UITableViewDelegate
 extension SettingsViewController: UITableViewDelegate { }
-
-// MARK: - SettingsTableViewCellDelegate
-extension SettingsViewController: SettingsTableViewCellDelegate {
-    func unitSelectionDidChange(parameter: Parameter, selectedIndex: Int) {
-        userDefaultsManager.saveSelectedUnitIndex(for: parameter, index: selectedIndex)
-    }
-}
