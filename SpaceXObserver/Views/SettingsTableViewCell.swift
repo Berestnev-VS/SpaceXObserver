@@ -43,7 +43,6 @@ final class SettingsTableViewCell: UITableViewCell {
     }
 
     @objc private func unitChanged() {
-        guard let parameter = parameter else { return }
         selectionHandler?(unitSegmentedControl.selectedSegmentIndex)
     }
 }
