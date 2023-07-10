@@ -11,7 +11,7 @@ final class SettingsTableViewCell: UITableViewCell {
     // MARK: - Properties
     private let unitSegmentedControl = UISegmentedControl()
     private var parameter: Parameter?
-    private var selectionHandler: ((Int) -> Void)?
+    private var onChangeUnit: ((Int) -> Void)?
 
     // MARK: - init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -32,9 +32,9 @@ final class SettingsTableViewCell: UITableViewCell {
     }
 
     // MARK: - Methods
-    public func configure(with parameter: Parameter, selectedUnitIndex: Int, selectionHandler: @escaping (Int) -> Void) {
+    public func configure(with parameter: Parameter, selectedUnitIndex: Int, onChangeUnit: @escaping (Int) -> Void) {
         self.parameter = parameter
-        self.selectionHandler = selectionHandler
+        self.onChangeUnit = onChangeUnit
         textLabel?.text = parameter.title
         for unit in parameter.units {
             unitSegmentedControl.insertSegment(withTitle: unit, at: 0, animated: false)
@@ -43,6 +43,6 @@ final class SettingsTableViewCell: UITableViewCell {
     }
 
     @objc private func unitChanged() {
-        selectionHandler?(unitSegmentedControl.selectedSegmentIndex)
+        onChangeUnit?(unitSegmentedControl.selectedSegmentIndex)
     }
 }

@@ -25,7 +25,6 @@ final class SettingsViewController: UIViewController {
     // MARK: - Methods
     private func setupTableView() {
         tableView.dataSource = self
-        tableView.delegate = self
         tableView.rowHeight = 60
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.identifier)
     }
@@ -59,6 +58,3 @@ extension SettingsViewController: UITableViewDataSource {
     }
 
 }
-
-// MARK: - UITableViewDelegate
-extension SettingsViewController: UITableViewDelegate { }

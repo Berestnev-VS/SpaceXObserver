@@ -13,7 +13,7 @@ final class UserDefaultsManager {
     }
 
     func getSelectedUnitIndex(for parameter: Parameter) -> Int {
-        return UserDefaults.standard.integer(forKey: parameter.title)
+        UserDefaults.standard.integer(forKey: parameter.title)
     }
 }
 
