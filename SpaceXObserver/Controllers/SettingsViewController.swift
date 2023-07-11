@@ -7,33 +7,54 @@
 
 import UIKit
 
-class SettingsViewController: UIViewController {
-    let tableView = UITableView()
+final class SettingsViewController: UIViewController {
+    // MARK: - Properties
+    private let tableView = UITableView()
+    private let userDefaultsManager = UserDefaultsManager()
+    private var selectedUnitIndices: [Int] = []
 
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.identifier)
-        tableView.frame = view.bounds
+        view.backgroundColor = .white
+        setupTableView()
         view.addSubview(tableView)
+        setupConstraints()
+    }
+
+    // MARK: - Methods
+    private func setupTableView() {
+        tableView.dataSource = self
+        tableView.rowHeight = 60
+        tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: SettingsTableViewCell.identifier)
+    }
+
+    private func setupConstraints() {
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 }
 
+// MARK: - UITableViewDataSource
 extension SettingsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Parameter.allCases.count
+        Parameter.allCases.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.identifier, for: indexPath) as! SettingsTableViewCell
-        cell.parameter = Parameter(rawValue: indexPath.row)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.identifier,
+                                                       for: indexPath) as? SettingsTableViewCell else { return UITableViewCell() }
+        let parameter = Parameter.allCases[indexPath.row]
+        let selectedUnitIndex = userDefaultsManager.getSelectedUnitIndex(for: parameter)
+        cell.configure(with: parameter, selectedUnitIndex: selectedUnitIndex) { selectedIndex in
+            self.userDefaultsManager.saveSelectedUnitIndex(for: parameter, index: selectedIndex)
+        }
         return cell
     }
-}
 
-extension SettingsViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
-    }
 }

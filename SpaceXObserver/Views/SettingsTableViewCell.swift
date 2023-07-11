@@ -7,27 +7,13 @@
 
 import UIKit
 
-class SettingsTableViewCell: UITableViewCell {
+final class SettingsTableViewCell: UITableViewCell {
+    // MARK: - Properties
+    private let unitSegmentedControl = UISegmentedControl()
+    private var parameter: Parameter?
+    private var onChangeUnit: ((Int) -> Void)?
 
-    static let identifier = "SettingsTableViewCell"
-
-    var parameter: Parameter? {
-        didSet {
-            guard let parameter = parameter else { return }
-            textLabel?.text = parameter.title
-            unitSegmentedControl.removeAllSegments()
-            for (index, unit) in parameter.units.enumerated() {
-                unitSegmentedControl.insertSegment(withTitle: unit, at: index, animated: false)
-            }
-            unitSegmentedControl.selectedSegmentIndex = UserDefaults.standard.integer(forKey: parameter.title)
-        }
-    }
-
-    let unitSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl()
-        return segmentedControl
-    }()
-
+    // MARK: - init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         unitSegmentedControl.addTarget(self, action: #selector(unitChanged), for: .valueChanged)
@@ -39,8 +25,24 @@ class SettingsTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc func unitChanged() {
-        guard let parameter = parameter else { return }
-        UserDefaults.standard.set(unitSegmentedControl.selectedSegmentIndex, forKey: parameter.title)
+    // MARK: - Lifecycle
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        unitSegmentedControl.removeAllSegments()
+    }
+
+    // MARK: - Methods
+    public func configure(with parameter: Parameter, selectedUnitIndex: Int, onChangeUnit: @escaping (Int) -> Void) {
+        self.parameter = parameter
+        self.onChangeUnit = onChangeUnit
+        textLabel?.text = parameter.title
+        for unit in parameter.units {
+            unitSegmentedControl.insertSegment(withTitle: unit, at: 0, animated: false)
+        }
+        unitSegmentedControl.selectedSegmentIndex = selectedUnitIndex
+    }
+
+    @objc private func unitChanged() {
+        onChangeUnit?(unitSegmentedControl.selectedSegmentIndex)
     }
 }
