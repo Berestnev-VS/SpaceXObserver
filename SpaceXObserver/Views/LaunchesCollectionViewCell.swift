@@ -16,7 +16,6 @@ final class LaunchesCollectionViewCell: UICollectionViewCell {
     //MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = .systemGray.withAlphaComponent(0.2)
         contentView.addSubview(titleLabel)
         contentView.addSubview(dateLabel)
         contentView.addSubview(statusLaunchImage)
@@ -33,6 +32,7 @@ final class LaunchesCollectionViewCell: UICollectionViewCell {
         clipsToBounds = true
         layer.cornerRadius = 20
         layer.cornerCurve = .continuous
+        contentView.backgroundColor = .systemGray.withAlphaComponent(0.2)
         titleLabel.font = .systemFont(ofSize: 22)
         titleLabel.textColor = .white
         dateLabel.font = .systemFont(ofSize: 16)
