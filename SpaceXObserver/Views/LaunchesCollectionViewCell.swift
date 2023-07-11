@@ -69,7 +69,7 @@ final class LaunchesCollectionViewCell: UICollectionViewCell {
         rocketDateFormatter.dateFormat = "dd MMMM, yyyy"
         dateLabel.text = rocketDateFormatter.string(from: launch.dateLocal)
         titleLabel.text = launch.name
-        if let status = launch.success {
+        if let status = launch.isSuccess {
             statusLaunchImage.image = status ? UIImage(systemName: "checkmark.circle") : UIImage(systemName: "xmark.circle")
         } else {
             statusLaunchImage.image = UIImage(systemName: "questionmark")
