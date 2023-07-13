@@ -16,9 +16,7 @@ final class LaunchesCollectionViewCell: UICollectionViewCell {
     //MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(dateLabel)
-        contentView.addSubview(statusLaunchImage)
+        [titleLabel, dateLabel, statusLaunchImage].forEach(contentView.addSubview)
         setupUI()
         setupConstraints()
     }
@@ -33,7 +31,7 @@ final class LaunchesCollectionViewCell: UICollectionViewCell {
         layer.cornerRadius = 20
         layer.cornerCurve = .continuous
         contentView.backgroundColor = .systemGray.withAlphaComponent(0.2)
-        titleLabel.font = .systemFont(ofSize: 22)
+        titleLabel.font = .systemFont(ofSize: 21)
         titleLabel.textColor = .white
         dateLabel.font = .systemFont(ofSize: 16)
         dateLabel.textColor = .systemGray2
@@ -41,33 +39,31 @@ final class LaunchesCollectionViewCell: UICollectionViewCell {
 
     private func setupConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        let titleLabelConstraints: [NSLayoutConstraint] = [
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 25),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
-        ]
-        NSLayoutConstraint.activate(titleLabelConstraints)
-
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        let dateLabelConstraints: [NSLayoutConstraint] = [
-            dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -25),
-            dateLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)
-        ]
-        NSLayoutConstraint.activate(dateLabelConstraints)
-
         statusLaunchImage.translatesAutoresizingMaskIntoConstraints = false
-        let statusLaunchImageConstraints: [NSLayoutConstraint] = [
+
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 25),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: statusLaunchImage.leadingAnchor, constant: -5),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.centerYAnchor, constant: -5),
+
+            dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -25),
+            dateLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            dateLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            dateLabel.topAnchor.constraint(equalTo: contentView.centerYAnchor, constant: 5),
+
             statusLaunchImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             statusLaunchImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             statusLaunchImage.widthAnchor.constraint(equalToConstant: 50),
             statusLaunchImage.heightAnchor.constraint(equalToConstant: 50)
-        ]
-        NSLayoutConstraint.activate(statusLaunchImageConstraints)
+        ])
     }
 
-    func configure(with launch: Launch) {
+    func configure(with launch: Launch, dateString: String) {
         let rocketDateFormatter = DateFormatter()
         rocketDateFormatter.dateFormat = "dd MMMM, yyyy"
-        dateLabel.text = rocketDateFormatter.string(from: launch.dateLocal)
+        dateLabel.text = dateString
         titleLabel.text = launch.name
         if let status = launch.isSuccess {
             statusLaunchImage.image = status ? UIImage(systemName: "checkmark.circle") : UIImage(systemName: "xmark.circle")
