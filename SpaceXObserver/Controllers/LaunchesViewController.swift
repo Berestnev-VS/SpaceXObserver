@@ -11,14 +11,16 @@ final class LaunchesViewController: UIViewController {
 
     //MARK: - Properties
     private let apiCaller: APICaller
+    private let dateFormatter = DateFormatter()
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private var launches = [Launch]()
     private let rocketId: String
 
     //MARK: - init
     init(rocketId: String, apiCaller: APICaller = .init()) {
-        self.apiCaller = apiCaller
         self.rocketId = rocketId
+        self.apiCaller = apiCaller
+        dateFormatter.dateFormat = "dd MMMM, yyyy"
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -78,9 +80,7 @@ extension LaunchesViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LaunchesCollectionViewCell.identifier,
                                                             for: indexPath) as? LaunchesCollectionViewCell else { return UICollectionViewCell() }
         let launch = launches[indexPath.row]
-        let rocketDateFormatter = DateFormatter()
-        rocketDateFormatter.dateFormat = "dd MMMM, yyyy"
-        let dateString = rocketDateFormatter.string(from: launch.dateLocal)
+        let dateString = dateFormatter.string(from: launch.dateLocal)
         cell.configure(with: launch, dateString: dateString)
         return cell
     }
