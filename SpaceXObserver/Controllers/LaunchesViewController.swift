@@ -81,7 +81,13 @@ extension LaunchesViewController: UICollectionViewDataSource {
                                                             for: indexPath) as? LaunchesCollectionViewCell else { return UICollectionViewCell() }
         let launch = launches[indexPath.row]
         let dateString = dateFormatter.string(from: launch.dateLocal)
-        cell.configure(with: launch, dateString: dateString)
+        let image: UIImage
+        if let status = launch.isSuccess {
+            image = (status ? UIImage(systemName: "checkmark.circle") : UIImage(systemName: "xmark.circle")) ?? UIImage()
+        } else {
+            image = UIImage(systemName: "questionmark") ?? UIImage()
+        }
+        cell.configure(with: launch, dateString: dateString, image: image)
         return cell
     }
 }
@@ -89,11 +95,11 @@ extension LaunchesViewController: UICollectionViewDataSource {
 //MARK: - UICollectionViewDelegateFlowLayout
 extension LaunchesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width - 60, height: 100)
+        CGSize(width: view.frame.width - 60, height: 100)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 15
+        15
     }
 }
 

@@ -26,6 +26,14 @@ final class LaunchesCollectionViewCell: UICollectionViewCell {
     }
 
     //MARK: - Methods
+    func configure(with launch: Launch, dateString: String, image: UIImage) {
+        let rocketDateFormatter = DateFormatter()
+        rocketDateFormatter.dateFormat = "dd MMMM, yyyy"
+        dateLabel.text = dateString
+        titleLabel.text = launch.name
+        statusLaunchImage.image = image
+    }
+
     private func setupUI() {
         clipsToBounds = true
         layer.cornerRadius = 20
@@ -58,17 +66,5 @@ final class LaunchesCollectionViewCell: UICollectionViewCell {
             statusLaunchImage.widthAnchor.constraint(equalToConstant: 50),
             statusLaunchImage.heightAnchor.constraint(equalToConstant: 50)
         ])
-    }
-
-    func configure(with launch: Launch, dateString: String) {
-        let rocketDateFormatter = DateFormatter()
-        rocketDateFormatter.dateFormat = "dd MMMM, yyyy"
-        dateLabel.text = dateString
-        titleLabel.text = launch.name
-        if let status = launch.isSuccess {
-            statusLaunchImage.image = status ? UIImage(systemName: "checkmark.circle") : UIImage(systemName: "xmark.circle")
-        } else {
-            statusLaunchImage.image = UIImage(systemName: "questionmark")
-        }
     }
 }
