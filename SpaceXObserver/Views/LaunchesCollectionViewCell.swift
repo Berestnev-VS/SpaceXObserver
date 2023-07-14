@@ -26,7 +26,7 @@ final class LaunchesCollectionViewCell: UICollectionViewCell {
     }
 
     //MARK: - Methods
-    func configure(with launch: Launch, dateString: String, image: UIImage) {
+    func configure(with launch: Launch, dateString: String, image: UIImage?) {
         let rocketDateFormatter = DateFormatter()
         rocketDateFormatter.dateFormat = "dd MMMM, yyyy"
         dateLabel.text = dateString

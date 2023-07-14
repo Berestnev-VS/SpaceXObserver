@@ -81,11 +81,11 @@ extension LaunchesViewController: UICollectionViewDataSource {
                                                             for: indexPath) as? LaunchesCollectionViewCell else { return UICollectionViewCell() }
         let launch = launches[indexPath.row]
         let dateString = dateFormatter.string(from: launch.dateLocal)
-        let image: UIImage
+        let image: UIImage?
         if let status = launch.isSuccess {
-            image = (status ? UIImage(systemName: "checkmark.circle") : UIImage(systemName: "xmark.circle")) ?? UIImage()
+            image = status ? UIImage(systemName: "checkmark.circle") : UIImage(systemName: "xmark.circle")
         } else {
-            image = UIImage(systemName: "questionmark") ?? UIImage()
+            image = UIImage(systemName: "questionmark")
         }
         cell.configure(with: launch, dateString: dateString, image: image)
         return cell
